@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h1>TodoMVC</h1>
+			<button @click="scart='all'" type="button">所有{{studyList.length}}</button>
+			<button @click="scart='liall'"type="button" >已完成{{flags.length}}</button>
+			<button @click="scart='noall'"type="button">未完成{{studyList.length-flags.length}}</button>
+			<h2>添加任务,enter添加</h2>
+			<input type="text" @keyup.enter="addStudy" v-model="news" />
+			<h2>任务列表</h2>
+			<div v-for="(item,index) in upList">
+				<input type="checkbox" v-model="item.flag" />
+				<span>{{item.name}}</span>
+				<button type="button" @click="delStudy(index)">x</button>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			const vm = new Vue({
+				el:"#app",
+				data:{
+					scart:"all",
+					
+					news:"",
+					studyList:[{
+						name:"学习Python",
+						flag:true,
+					},
+					{
+						name:"学习Js",
+						flag:true,
+					},
+					{
+						name:"学习Vue",
+						flag:false
+					},
+					{
+						name:"学习爬虫",
+						flag:false
+					},
+					
+					]
+				},
+				methods:{
+					delStudy(index){
+						this.studyList.splice(index,1)
+					},
+					addStudy(){
+						if(this.news.length<=0){
+							alert("不能为空")
+						}
+						else{
+							this.studyList.push({
+								name:this.news,
+								flag:false
+							})
+						}
+						this.news=""
+					}
+				},
+				computed:{
+					flags(){
+						return this.studyList.filter((item)=>{
+							return item.flag
+						})
+					},
+					upList(){
+						if(this.scart=="all"){
+							return this.studyList ;
+						}
+						else if(this.scart=="liall"){
+							return this.flags;
+						}
+						else
+						{
+							return this.studyList.filter((item)=>{
+								return !item.flag;
+							});
+						}
+						
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
